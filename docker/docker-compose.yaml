@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  app:
+    image: backend
+    container_name: "backend"
+    volumes:
+      - ../backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - "fast_network"
+
+
+  db:
+    image: mariadb:11.1
+    ports:
+      - 3305:3306
+    # volumes:
+    #   - ./db/conf.d:/etc/mysql/mariadb.conf.d # mariadb 설정 파일
+    #   - ./db/data:/var/lib/mysql # data dir
+    #   - ./db/initdb.d:/docker-entrypoint-initdb.d
+    # env_file: .env
+    environment:
+      TZ: Asia/Seoul
+      MARIADB_USER: mnc
+      MARIADB_PASSWORD: mnc1!
+      MARIADB_ROOT_PASSWORD: mnc1!
+      MARIADB_DATABASE: test
+    networks:
+      - "fast_network"
+    restart: always
+
+networks:
+  fast_network:
+    driver: bridge
